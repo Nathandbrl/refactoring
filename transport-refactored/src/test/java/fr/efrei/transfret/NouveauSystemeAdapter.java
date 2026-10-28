@@ -27,20 +27,15 @@ import java.util.stream.Collectors;
  */
 public class NouveauSystemeAdapter implements SystemeTransport {
 
+    private ContexteApplication contexte;
     private ServiceClient serviceClient;
     private ServiceExpedition serviceExpedition;
 
     @Override
     public void reinitialiser() {
-        Database.getInstance();
-        Database.expeditions.clear();
-        Database.clients.clear();
-        EmailService.journal.clear();
-        SmsService.journal.clear();
-        ServiceExpedition.compteur = 0;
-        Flotte.initialiser();
-        serviceClient = new ServiceClient();
-        serviceExpedition = new ServiceExpedition();
+        contexte = new ContexteApplication();
+        serviceClient = contexte.getServiceClient();
+        serviceExpedition = contexte.getServiceExpedition();
     }
 
     @Override
@@ -52,7 +47,7 @@ public class NouveauSystemeAdapter implements SystemeTransport {
 
     @Override
     public Optional<String> creerExpedition(DemandeExpedition d) {
-        Client client = Database.clients.get(d.refClient());
+        Client client = contexte.trouverClient(d.refClient());
         Expedition expedition = serviceExpedition.creerExpedition(client, versColis(d.colis()), d.villeDepart(),
                 d.villeArrivee(), ModeTransport.valueOf(d.mode().name()), d.urgent(), d.assurance());
         return Optional.ofNullable(expedition).map(Expedition::getId);
@@ -60,7 +55,7 @@ public class NouveauSystemeAdapter implements SystemeTransport {
 
     @Override
     public Optional<EtatExpedition> consulter(String id) {
-        Expedition e = Database.expeditions.get(id);
+        Expedition e = contexte.trouverExpedition(id);
         if (e == null) {
             return Optional.empty();
         }
@@ -94,17 +89,17 @@ public class NouveauSystemeAdapter implements SystemeTransport {
 
     @Override
     public Optional<String> facture(String id) {
-        GenerateurFacture generateur = new GenerateurFacture();
-        return Optional.ofNullable(Database.expeditions.get(id)).map(generateur::generer);
+        return Optional.ofNullable(contexte.trouverExpedition(id))
+                .map(contexte.getGenerateurFacture()::generer);
     }
 
     @Override
     public List<Notification> notifications() {
         List<Notification> notifications = new ArrayList<>();
-        for (String[] email : EmailService.journal) {
+        for (String[] email : contexte.emailsEnvoyes()) {
             notifications.add(new Notification(Canal.EMAIL, email[0], email[1]));
         }
-        for (String[] sms : SmsService.journal) {
+        for (String[] sms : contexte.smsEnvoyes()) {
             notifications.add(new Notification(Canal.SMS, sms[0], sms[1]));
         }
         return notifications;

@@ -6,9 +6,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        Flotte.initialiser();
-        ServiceClient serviceClient = new ServiceClient();
-        ServiceExpedition serviceExpedition = new ServiceExpedition();
+        ContexteApplication contexte = new ContexteApplication();
+        ServiceClient serviceClient = contexte.getServiceClient();
+        ServiceExpedition serviceExpedition = contexte.getServiceExpedition();
 
         System.out.println("\n----- Clients -----");
         Client dupont = serviceClient.creerClient("Jean Dupont", "jean.dupont@mail.fr", "0601020304", "12 rue de la Paix, 75002 Paris", TypeClient.PARTICULIER, null);
@@ -46,8 +46,7 @@ public class Main {
         serviceExpedition.annulerExpedition(exp2.getId());
 
         System.out.println("\n----- Factures -----");
-        GenerateurFacture generateurFacture = new GenerateurFacture();
-        System.out.println(generateurFacture.generer(exp1));
-        System.out.println(generateurFacture.generer(exp2));
+        System.out.println(contexte.getGenerateurFacture().generer(exp1));
+        System.out.println(contexte.getGenerateurFacture().generer(exp2));
     }
 }

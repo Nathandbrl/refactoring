@@ -1,19 +1,17 @@
 package fr.efrei.transfret;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Flotte {
 
-    public static List<Vehicule> vehicules = new ArrayList<Vehicule>();
-
-    public static void initialiser() {
-        vehicules.clear();
-        vehicules.add(new Camion("AB-123-CD", 19000, false));
-        vehicules.add(new Camion("EF-456-GH", 12000, true));
-        vehicules.add(new CamionFrigorifique("IJ-789-KL", 8000));
-        vehicules.add(new Train("TR-0001", 600000));
-        vehicules.add(new Bateau("CMA-CGM-01", 20000000, true));
-        vehicules.add(new Avion("F-GTXA", 100000));
+    public List<Vehicule> creerVehicules() {
+        return List.of(
+                new Camion("AB-123-CD", 19_000, false),
+                new Camion("EF-456-GH", 12_000, true),
+                new CamionFrigorifique("IJ-789-KL", 8_000),
+                new Train("TR-0001", 600_000),
+                new Bateau("CMA-CGM-01", 20_000_000, true),
+                new Avion("F-GTXA", 100_000)
+        );
     }
 }
