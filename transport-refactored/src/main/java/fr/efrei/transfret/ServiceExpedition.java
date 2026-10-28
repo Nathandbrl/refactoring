@@ -8,10 +8,6 @@ import java.util.Random;
 public class ServiceExpedition {
 
     private static final double TAUX_TTC = 1.20;
-    private static final double KILOMETRES_PAR_MILLE_NAUTIQUE = 1.852;
-    private static final double ALTITUDE_VOL_PIEDS = 35_000;
-    private static final int DISTANCE_ROULAGE_PISTE_KM = 2;
-    private static final double TEMPERATURE_REFRIGERATION = 4;
     private static final double TAUX_FRAIS_ANNULATION = 0.50;
 
     private final ExpeditionRepository expeditions;
@@ -106,24 +102,7 @@ public class ServiceExpedition {
         e.setStatut(StatutExpedition.EN_COURS);
         Vehicule v = e.getVehicule();
         v.setDisponible(false);
-        try {
-            v.faireLePlein();
-        } catch (Exception ex) {
-        }
-        if (e.getMode() == ModeTransport.ROUTE || e.getMode() == ModeTransport.RAIL) {
-            v.rouler(e.getDistance());
-        } else if (e.getMode() == ModeTransport.MER) {
-            v.naviguer((int) (e.getDistance() / KILOMETRES_PAR_MILLE_NAUTIQUE));
-        } else if (e.getMode() == ModeTransport.AIR) {
-            v.rouler(DISTANCE_ROULAGE_PISTE_KM);
-            v.voler((int) ALTITUDE_VOL_PIEDS);
-        }
-        for (Colis c : e.getColis()) {
-            if (c.getType() == TypeMarchandise.REFRIGERE) {
-                v.activerRefrigeration(TEMPERATURE_REFRIGERATION);
-                break;
-            }
-        }
+        v.partir(e.getDistance(), e.getColis());
         expeditions.mettreAJour(e);
         notificateur.notifier(e.getClient(), "Votre expédition " + e.getId() + " est en route",
                 "Votre expédition a quitté " + e.getVilleDepart() + ".",

@@ -1,38 +1,36 @@
 package fr.efrei.transfret;
 
+import java.util.List;
+
 public class Bateau extends Vehicule {
 
-    private boolean conteneursRefrigeres;
+    private static final double KILOMETRES_PAR_MILLE_NAUTIQUE = 1.852;
+    private static final double TEMPERATURE_REFRIGERATION = 4;
+
+    private final boolean conteneursRefrigeres;
 
     public Bateau(String immatriculation, double capaciteMax, boolean conteneursRefrigeres) {
         super(immatriculation, capaciteMax);
         this.conteneursRefrigeres = conteneursRefrigeres;
     }
 
-    public void rouler(int km) {
-        throw new UnsupportedOperationException("Un bateau ne roule pas");
+    @Override
+    public boolean peutPrendreEnCharge(ModeTransport mode, List<Colis> colis) {
+        return mode == ModeTransport.MER
+                && (!contient(colis, TypeMarchandise.REFRIGERE) || conteneursRefrigeres);
     }
 
-    public void naviguer(int milesNautiques) {
-        System.out.println("Le navire " + immatriculation + " navigue sur " + milesNautiques + " milles nautiques");
-    }
-
-    public void voler(int altitude) {
-        throw new UnsupportedOperationException("Un bateau ne vole pas");
-    }
-
-    public void activerRefrigeration(double temperature) {
-        if (!conteneursRefrigeres) {
-            throw new UnsupportedOperationException("Pas de conteneurs frigorifiques sur ce navire");
+    @Override
+    public void partir(int distance, List<Colis> colis) {
+        int milesNautiques = (int) (distance / KILOMETRES_PAR_MILLE_NAUTIQUE);
+        System.out.println("Le navire " + immatriculation + " navigue sur "
+                + milesNautiques + " milles nautiques");
+        if (contient(colis, TypeMarchandise.REFRIGERE)) {
+            System.out.println("Conteneurs frigorifiques réglés à " + TEMPERATURE_REFRIGERATION + "°C");
         }
-        System.out.println("Conteneurs frigorifiques réglés à " + temperature + "°C");
     }
 
-    public boolean peutTransporterMatieresDangereuses() {
-        return true;
-    }
-
-    public boolean aConteneursRefrigeres() {
-        return conteneursRefrigeres;
+    private static boolean contient(List<Colis> colis, TypeMarchandise type) {
+        return colis.stream().anyMatch(c -> c.getType() == type);
     }
 }

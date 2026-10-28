@@ -51,7 +51,10 @@ public abstract class Vehicule implements IVehicule {
         }
     }
 
-    public void faireLePlein() {
-        System.out.println("Plein effectué pour " + immatriculation);
-    }
+    @Override
+    public abstract boolean peutPrendreEnCharge(ModeTransport mode, List<Colis> colis);
+
+    @Override
+    public abstract void partir(int distance, List<Colis> colis);
+
 }
