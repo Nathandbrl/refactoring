@@ -38,6 +38,8 @@ public class Utils {
             return 775;
         } else if ((a.equals("PARIS") && b.equals("LILLE")) || (a.equals("LILLE") && b.equals("PARIS"))) {
             return 225;
+        } else if ((a.equals("PARIS") && b.equals("LE HAVRE")) || (a.equals("LE HAVRE") && b.equals("PARIS"))) {
+            return 365;
         } else if ((a.equals("PARIS") && b.equals("BORDEAUX")) || (a.equals("BORDEAUX") && b.equals("PARIS"))) {
             return 585;
         } else if ((a.equals("LYON") && b.equals("MARSEILLE")) || (a.equals("MARSEILLE") && b.equals("LYON"))) {

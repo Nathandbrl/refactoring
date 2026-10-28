@@ -37,7 +37,8 @@ public class ContexteApplication {
                 ModeTransport.ROUTE, new TarifRoute(),
                 ModeTransport.RAIL, new TarifRail(),
                 ModeTransport.MER, new TarifMer(),
-                ModeTransport.AIR, new TarifAir()
+                ModeTransport.AIR, new TarifAir(),
+                ModeTransport.FLUVIAL, new TarifFluvial()
         );
         Map<TypeClient, PolitiqueRemise> politiquesRemise = Map.of(
                 TypeClient.PARTICULIER, new PolitiqueRemiseAucune(),

@@ -27,6 +27,7 @@ public class AssembleurPrix {
         if (donnees.urgent()) {
             composant = new SupplementUrgence(composant);
         }
+        composant = new SupplementHorsGabarit(composant);
 
         PolitiqueRemise politique = politiquesRemise.get(donnees.typeClient());
         if (politique == null) {

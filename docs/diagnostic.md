@@ -47,7 +47,7 @@ Il faudra probablement toucher aux endroits suivants :
 - `Utils.getDistance()` pour ajouter Paris–Le Havre (365 km) ;
 - les tests de tarif, délai, refus et affectation.
 
-À noter pour l'étape 8 : le contrat fourni ne connaît que `ROUTE`, `RAIL`, `MER` et `AIR`. Comme on ne doit pas modifier `transport-contrat`, ses tests ne pourront pas demander directement le nouveau mode sans changement de périmètre.
+À noter pour l'étape 8 : le contrat fourni ne connaît que `ROUTE`, `RAIL`, `MER` et `AIR`. Comme on ne modifie pas `transport-contrat`, `FLUVIAL` est ajouté au modèle interne et testé directement dans `transport-refactored`. Le supplément hors gabarit est limité au mode fluvial pour ne pas changer les tarifs déjà vérifiés par les tests de contrat.
 
 ## Si on ajoute le supplément « hors gabarit »
 

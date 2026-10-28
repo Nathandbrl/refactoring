@@ -28,11 +28,19 @@ public class ValidateurExpedition {
             return false;
         }
         if (refrigere && mode != ModeTransport.ROUTE && mode != ModeTransport.MER) {
+            if (mode == ModeTransport.FLUVIAL) {
+                System.out.println("ERREUR : le transport fluvial n'accepte pas les colis réfrigérés");
+                return false;
+            }
             System.out.println("ERREUR : le transport réfrigéré n'est possible que par route ou par mer");
             return false;
         }
         if (urgent && mode == ModeTransport.MER) {
             System.out.println("ERREUR : pas d'option urgente pour le transport maritime");
+            return false;
+        }
+        if (urgent && mode == ModeTransport.FLUVIAL) {
+            System.out.println("ERREUR : pas d'option urgente pour le transport fluvial");
             return false;
         }
         return true;

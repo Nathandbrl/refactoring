@@ -10,6 +10,7 @@ public class EstimateurDelai {
     private static final double DISTANCE_MER_PAR_JOUR = 720;
     private static final int JOURS_SUPPLEMENTAIRES_MER = 2;
     private static final int SEUIL_DISTANCE_AERIENNE_LONGUE = 3_000;
+    private static final double DISTANCE_FLUVIALE_PAR_JOUR = 360;
 
     public int calculer(int distance, ModeTransport mode, boolean urgent) {
         int jours = 0;
@@ -29,6 +30,9 @@ public class EstimateurDelai {
             case AIR:
                 jours = distance > SEUIL_DISTANCE_AERIENNE_LONGUE ? 2 : 1;
                 if (urgent) jours = 1;
+                break;
+            case FLUVIAL:
+                jours = (int) Math.ceil(distance / DISTANCE_FLUVIALE_PAR_JOUR);
                 break;
         }
         return Math.max(jours, 1);
