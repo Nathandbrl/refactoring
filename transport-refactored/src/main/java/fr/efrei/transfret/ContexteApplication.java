@@ -1,6 +1,7 @@
 package fr.efrei.transfret;
 
 import java.util.List;
+import java.util.Map;
 
 public class ContexteApplication {
 
@@ -22,13 +23,28 @@ public class ContexteApplication {
         serviceClient = new ServiceClient(clients, notificateur);
         serviceExpedition = new ServiceExpedition(
                 expeditions,
-                new CalculateurPrix(),
+                creerCalculateurPrix(),
                 new AffectationVehicule(new Flotte().creerVehicules()),
                 new ValidateurExpedition(),
                 new EstimateurDelai(),
                 notificateur
         );
         generateurFacture = new GenerateurFacture();
+    }
+
+    private CalculateurPrix creerCalculateurPrix() {
+        Map<ModeTransport, TarifTransport> tarifs = Map.of(
+                ModeTransport.ROUTE, new TarifRoute(),
+                ModeTransport.RAIL, new TarifRail(),
+                ModeTransport.MER, new TarifMer(),
+                ModeTransport.AIR, new TarifAir()
+        );
+        Map<TypeClient, PolitiqueRemise> politiquesRemise = Map.of(
+                TypeClient.PARTICULIER, new PolitiqueRemiseAucune(),
+                TypeClient.ENTREPRISE, new PolitiqueRemiseEntreprise(),
+                TypeClient.PREMIUM, new PolitiqueRemisePremium()
+        );
+        return new CalculateurPrix(tarifs, politiquesRemise);
     }
 
     public ServiceClient getServiceClient() {
