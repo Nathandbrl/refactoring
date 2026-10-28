@@ -44,7 +44,7 @@ public class ContexteApplication {
                 TypeClient.ENTREPRISE, new PolitiqueRemiseEntreprise(),
                 TypeClient.PREMIUM, new PolitiqueRemisePremium()
         );
-        return new CalculateurPrix(tarifs, politiquesRemise);
+        return new CalculateurPrix(new AssembleurPrix(tarifs, politiquesRemise));
     }
 
     public ServiceClient getServiceClient() {
